@@ -7,8 +7,8 @@
     <ProjectGuid>{9D781833-4219-4C11-89BB-6D0160131414}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Karat30XDriver</RootNamespace>
-    <AssemblyName>Karat30XDriver</AssemblyName>
+    <RootNamespace>KaratDanfosDriver</RootNamespace>
+    <AssemblyName>KaratDanfosDriver</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
