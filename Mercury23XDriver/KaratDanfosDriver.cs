@@ -42,8 +42,8 @@ namespace Drivers.KaratDanfosDriver
         enum KaratFunctions
         {
             Read = 0x04,
+            Write = 0x06,
 
-            Write = 0x10,
             User = 0x42
         }
 
@@ -79,7 +79,7 @@ namespace Drivers.KaratDanfosDriver
                 Array.Reverse(payloadBytes);
             return IsLittleEndian;
         }
-        private byte[] makeCmd(KaratFunctions func, short initialRegister, byte[] payload)
+        private byte[] makeCmd(KaratFunctions func, ushort initialRegister, byte[] payload)
         {
             List<byte> resCmd = new List<byte>();
 
@@ -101,15 +101,15 @@ namespace Drivers.KaratDanfosDriver
             }
             else if (func == KaratFunctions.Write)
             {
-                short registersCnt = 0x0000; // не считаем начальный регистр?!
-                registersCnt += (short)(payload.Length / 2);
+                //short registersCnt = 0x0000; // не считаем начальный регистр?!
+                //registersCnt += (short)(payload.Length / 2);
 
-                byte[] registersCntBytes = BitConverter.GetBytes(registersCnt);
-                checkLittleEndianAndConvert(ref registersCntBytes);
-                resCmd.AddRange(registersCntBytes);
+                //byte[] registersCntBytes = BitConverter.GetBytes(registersCnt);
+                //checkLittleEndianAndConvert(ref registersCntBytes);
+                //resCmd.AddRange(registersCntBytes);
 
-                byte bytesCnt = (byte)(payload.Length);
-                resCmd.Add(bytesCnt);
+                //byte bytesCnt = (byte)(payload.Length);
+                //resCmd.Add(bytesCnt);
 
                 resCmd.AddRange(payload);
             }
@@ -205,7 +205,7 @@ namespace Drivers.KaratDanfosDriver
 
         public bool getMeterSoftware(ref string softwareString)
         {
-            const short REG_READ_VERSION = 0x0054;
+            const ushort REG_READ_VERSION = 0x0054;
             byte answerBytesCnt = 16;
 
             byte[] cmd = this.makeCmd(KaratFunctions.Read, REG_READ_VERSION, new byte[answerBytesCnt]);
@@ -244,7 +244,7 @@ namespace Drivers.KaratDanfosDriver
         public bool getMeterSerialNumber(ref string serialNumber)
         {
             // чтение заводских констант
-            const short REG_READ_SN = 0x0044;
+            const ushort REG_READ_SN = 0x0044;
             byte[] cmd = this.makeCmd(KaratFunctions.Read, REG_READ_SN, new byte[32]);
 
             byte[] incommingData = new byte[1];
@@ -274,12 +274,35 @@ namespace Drivers.KaratDanfosDriver
                 return false;
         }
 
+
+        public bool setMeterAddress(ushort decAddr)
+        {
+            byte[] addrArr = BitConverter.GetBytes(decAddr);
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(addrArr);
+
+            const ushort REG_READ_ADDR = 0xF001;
+            byte[] cmd = this.makeCmd(KaratFunctions.Write, REG_READ_ADDR, addrArr);
+
+            byte[] incommingData = new byte[1];
+            int resWriteRead = m_vport.WriteReadData(FindPacketSignature, cmd, ref incommingData, cmd.Length, -1);
+
+            string errDescription = "";
+            if (!isAnswerDataOk(incommingData, ref errDescription))
+            {
+                this.WriteToLog("setAddrErr: " + errDescription);
+                return false;
+            }
+
+            return true;
+        }
+
         private bool getArchiveRecordConfiguration(out byte[] configurationBytes)
         {
             configurationBytes = new byte[0];
 
             // чтение конфигурации архива
-            const short REG_READ_VERSION = 0x0106;
+            const ushort REG_READ_VERSION = 0x0106;
             byte[] cmd = this.makeCmd(KaratFunctions.Read, REG_READ_VERSION, new byte[0]);
 
             byte[] incommingData = new byte[1];
@@ -310,7 +333,7 @@ namespace Drivers.KaratDanfosDriver
         private bool setArchiveRequestDate(DateTime dt)
         {
             // запишем дату в нужный регистр
-            const short REG_SET_DATE = 0x0060;
+            const ushort REG_SET_DATE = 0x0060;
 
             // час, день, месяц, год
             byte[] dateArr = { (byte)dt.Hour, (byte)dt.Day, (byte)dt.Month, byte.Parse(dt.ToString("yy")) };
@@ -337,7 +360,7 @@ namespace Drivers.KaratDanfosDriver
                 return false;
 
             // запросим нужную запись
-            short register = (short)archType;
+            ushort register = (ushort)archType;
             byte[] cmd = this.makeCmd(KaratFunctions.Read, register, new byte[0]);
 
             byte[] incommingData = new byte[1];
@@ -390,7 +413,7 @@ namespace Drivers.KaratDanfosDriver
             value = -1;
 
             // в документации указан номер регистра, адрес регистра = номер регистра - 1
-            short register = (short)(regNumber - 1);
+            ushort register = (ushort)(regNumber - 1);
             byte[] cmd = this.makeCmd(KaratFunctions.Read, register, new byte[byteCnt]);
 
             byte[] incommingData = new byte[1];

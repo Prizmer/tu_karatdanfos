@@ -333,7 +333,7 @@ namespace elfextendedapp
             meterPinged += new EventHandler(Form1_meterPinged);
             pollingEnd += new EventHandler(Form1_pollingEnd);
 
-            richTextBox1.Clear();
+            btnAddressRead.Clear();
             /*
             richTextBox1.Text += 
 @"Адреса параметров, канал 1, например, температуры = 0x31, 2-й канал 0x32 и т.д.
@@ -360,7 +360,7 @@ namespace elfextendedapp
 */
 
 
-            richTextBox1.Text += @"
+            btnAddressRead.Text += @"
  Краткая справка тип - кол-во бит:
  sint64, uint64  - 64
  uint32, float - 32
@@ -386,7 +386,7 @@ namespace elfextendedapp
         //список, хранящий номера параметров в перечислении Params драйвера
         //целесообразно его сделать здесь, так как кол-во считываемых значений зависит от кол-ва колонок
         List<int> paramCodes = null;
-        private void createMainTable(ref DataTable dt)
+        private void createMainTableOld(ref DataTable dt)
         {
             paramCodes = new List<int>();
 
@@ -528,6 +528,35 @@ namespace elfextendedapp
             }
 
 
+
+            DataRow captionRow = dt.NewRow();
+            for (int i = 0; i < dt.Columns.Count; i++)
+                captionRow[i] = dt.Columns[i].Caption;
+            dt.Rows.Add(captionRow);
+
+        }
+
+        private void createMainTable(ref DataTable dt)
+        {
+            paramCodes = new List<int>();
+
+            //creating columns for internal data table
+            DataColumn column = dt.Columns.Add();
+            column.DataType = typeof(string);
+            // сетевой номер
+            column.Caption = "№";
+            column.ColumnName = "colFlat";
+
+
+            column = dt.Columns.Add();
+            column.DataType = typeof(string);
+            column.Caption = "Результат";
+            column.ColumnName = "colResult";
+
+            column = dt.Columns.Add();
+            column.DataType = typeof(string);
+            column.Caption = "SN";
+            column.ColumnName = "colSN";
 
             DataRow captionRow = dt.NewRow();
             for (int i = 0; i < dt.Columns.Count; i++)
@@ -1078,7 +1107,7 @@ namespace elfextendedapp
             for (int m = 0; m < rowsList.Count; m++)
             {
                 int i = rowsList[m];
-                object o = dt.Rows[i]["colFactory"];
+                object o = dt.Rows[i]["colFlat"];
 
                 if (o != null)
                 {
@@ -1087,87 +1116,35 @@ namespace elfextendedapp
                         Meter = new KaratDanfosDriver();
                         uint address = uint.Parse(o.ToString());
 
-                        if (cbFromFileTcp.Checked)
-                        {
-                            //TODO: сделать это подсосом из xml
-                            NameValueCollection loadedAppSettings = new NameValueCollection();
-                            loadedAppSettings.Add("localEndPointIp", this.listBox1.SelectedItem.ToString());
-
-                            Vp = new TcpipPort(dt.Rows[i][3].ToString(), int.Parse(dt.Rows[i][4].ToString()), 600, 1000, 50, loadedAppSettings);
-                        }
+   
 
                         Meter.Init(address, "", Vp);
 
-                        string meterType = "";
-                        bool isWater = false;
-                        /*
-                        if (Meter.ReadMeterType(ref meterType))
+                        string meterSN = "";
+                        if (Meter.ReadSerialNumber(ref meterSN))
                         {
-                            dt.Rows[i]["colResult"] = "На связи";
-                            dt.Rows[i]["colMeterType"] = meterType;
-
-                            if (meterType == "voda_rs485" || meterType == "pulsarM")
-                                isWater = true;
-                        } 
-                        else
-                        {
-                            dt.Rows[i]["colResult"] = "Ошибка";
-                        }
-                        */
-                        if (Meter.ReadSerialNumber(ref meterType))
-                        {
-                            dt.Rows[i]["colReadSN"] = meterType;
+                            dt.Rows[i]["colSN"] = meterSN;
                         }
                         else
                         {
-                            WriteToLog("Не определен sn");
+                            dt.Rows[i]["colSN"] = "Err";
                         }
 
-                        /*
-                        List<byte> typesList = new List<byte>();
 
-                        if (!isWater)
-                        { 
-                            typesList.Add(3); //t pod
-                            typesList.Add(4); //t obr
-                            typesList.Add(7); //energy
-                            typesList.Add(8); //volume
-                            Meter.SetTypesForRead(typesList);
+                        // 9	RO	sint64	AccumulatedEnergy	Дж	Накопленная тепловая энергия
 
-                            string constDbl = "0.#######"; 
 
-                            Values val = new Values();
-                            if (Meter.ReadCurrentValues(ref val))
-                            {
-                                dt.Rows[i]["colTempPod"] = val.listRV[0].value;
-                                dt.Rows[i]["colTempObr"] = val.listRV[1].value;
-                                dt.Rows[i]["colEnergy"] = val.listRV[2].value.ToString(constDbl);
-                                dt.Rows[i]["colVolume"] = val.listRV[3].value;
-                            }
+                        float resultVal = -1;
+                        if (Meter.ReadCurrentValues(9, 64, ref resultVal))
+                        {
+                            dt.Rows[i]["colResult"] = resultVal;
                         }
                         else
                         {
-                            WriteToLog("Water == true");
-                            typesList.Add(1); //1 канал
-                            Meter.SetTypesForRead(typesList);
-
-                            Values val = new Values();
-                            if (Meter.ReadCurrentValues(ref val))
-                            {
-                                dt.Rows[i]["colVolume"] = val.listRV[0].value;
-                            }
+                            dt.Rows[i]["colResult"] = "Err";
                         }
 
-                        string timeOn = "";
-                        if (Meter.ReadTimeOn(ref timeOn))
-                        {
-                            dt.Rows[i]["colTime"] = timeOn;
-                        }
-                        if (Meter.ReadTimeOnErr(ref timeOn))
-                        {
-                            dt.Rows[i]["colTimeErr"] = timeOn;
-                        }
-                        */
+
                     }
                     catch (Exception ex)
                     {
@@ -1409,9 +1386,9 @@ namespace elfextendedapp
                 serial = "No serial...";
             }
 
-            richTextBox1.Clear();
-            richTextBox1.Text += serial + "\n";
-            richTextBox1.Text += sw + "\n";
+            btnAddressRead.Clear();
+            btnAddressRead.Text += serial + "\n";
+            btnAddressRead.Text += sw + "\n";
         }
 
         private void btnIndPollDaily_Click(object sender, EventArgs e)
@@ -1421,20 +1398,20 @@ namespace elfextendedapp
 
             if (!pd.OpenLinkCanal())
             {
-                richTextBox1.Clear();
-                richTextBox1.Text += "No chanel opened...";
+                btnAddressRead.Clear();
+                btnAddressRead.Text += "No chanel opened...";
             }
 
-            richTextBox1.ScrollToCaret();
+            btnAddressRead.ScrollToCaret();
 
             float rVal = 0f;
             if (pd.ReadDailyValues(dateTimePicker1.Value.Date, (ushort)numericUpDown1.Value, (ushort)numericUpDown2.Value, ref rVal))
             {
-                richTextBox1.Text += rVal + ";\n";
+                btnAddressRead.Text += rVal + ";\n";
             }
             else
             {
-                richTextBox1.Text += "Не удалось " + (ushort)numericUpDown1.Value + ";\n";
+                btnAddressRead.Text += "Не удалось " + (ushort)numericUpDown1.Value + ";\n";
             }
         }
 
@@ -1445,18 +1422,18 @@ namespace elfextendedapp
 
             if (!pd.OpenLinkCanal())
             {
-                richTextBox1.Clear();
-                richTextBox1.Text += "No chanel opened...";
+                btnAddressRead.Clear();
+                btnAddressRead.Text += "No chanel opened...";
             }
 
             float rVal = 0f;
             if (pd.ReadMonthlyValues(dateTimePicker1.Value.Date, (ushort)numericUpDown1.Value, (ushort)numericUpDown2.Value, ref rVal))
             {
-                richTextBox1.Text += rVal + ";\n";
+                btnAddressRead.Text += rVal + ";\n";
             }
             else
             {
-                richTextBox1.Text += "Не удалось " + (ushort)numericUpDown1.Value + ";\n";
+                btnAddressRead.Text += "Не удалось " + (ushort)numericUpDown1.Value + ";\n";
             }
         }
 
@@ -1468,19 +1445,19 @@ namespace elfextendedapp
 
             if (!pd.OpenLinkCanal())
             {
-                richTextBox1.Clear();
-                richTextBox1.Text += "No chanel opened...";
+                btnAddressRead.Clear();
+                btnAddressRead.Text += "No chanel opened...";
             }
 
 
             float rVal = 0f;
             if (pd.ReadCurrentValues((ushort)numericUpDown1.Value, (ushort)numericUpDown2.Value, ref rVal))
             {
-                richTextBox1.Text += rVal + ";\n";
+                btnAddressRead.Text += rVal + ";\n";
             }
             else
             {
-                richTextBox1.Text += "Не удалось " + (ushort)numericUpDown1.Value + ";\n";
+                btnAddressRead.Text += "Не удалось " + (ushort)numericUpDown1.Value + ";\n";
             }
         }
 
@@ -1491,7 +1468,7 @@ namespace elfextendedapp
 
         private void richTextBox1_DoubleClick(object sender, EventArgs e)
         {
-            richTextBox1.Clear();
+            btnAddressRead.Clear();
         }
 
         private void btnReadHalfs_MouseCaptureChanged(object sender, EventArgs e)
@@ -1585,7 +1562,63 @@ namespace elfextendedapp
                 }
             }
 
-            richTextBox1.Text = resStr;
+            btnAddressRead.Text = resStr;
+        }
+
+        private void btnAddrRead_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnAddressSet_Click(object sender, EventArgs e)
+        {
+            string serial = "", sw = "", mt = "";
+
+            KaratDanfosDriver pd = new KaratDanfosDriver();
+            pd.Init(uint.Parse(textBox1.Text), passwordDefault, Vp);
+
+            if (!pd.setMeterAddress(ushort.Parse(textBox1.Text)))
+            {
+                sw = "Не получилось обновить адрес прибора...";
+            }
+
+            btnAddressRead.Clear();
+            btnAddressRead.Text += sw + "\n";
+        }
+
+        private void btnGenerateTable_Click(object sender, EventArgs e)
+        {
+            dt = new DataTable();
+            createMainTable(ref dt);
+
+
+            for (int rowIndex = (int)numAddrFrom.Value; rowIndex <= (int)numAddrTo.Value; rowIndex++)
+            {
+                if (doStopProcess)
+                {
+                    buttonStop.Enabled = false;
+                    return;
+                }
+
+                DataRow dataRow = dt.NewRow();
+                dataRow[0] = rowIndex;
+                dataRow[1] = "";
+
+               
+                dt.Rows.Add(dataRow);
+
+                incrProgressBar();
+            }
+
+            dgv1.DataSource = dt;
+
+            toolStripProgressBar1.Value = 0;
+            toolStripProgressBar1.Maximum = dt.Rows.Count - 1;
+            toolStripStatusLabel1.Text = String.Format("({0}/{1})", toolStripProgressBar1.Value, toolStripProgressBar1.Maximum);
+
+            InputDataReady = true;
+
+
         }
     }
 
