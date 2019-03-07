@@ -1368,11 +1368,12 @@ namespace elfextendedapp
         {
             string serial = "", sw = "", mt = "";
 
-            KaratDanfosDriver pd = new KaratDanfosDriver();
-            pd.Init(uint.Parse(textBox1.Text), passwordDefault, Vp);
+            //KaratDanfosDriver pd = new KaratDanfosDriver();
+            
+            Meter.Init(uint.Parse(textBox1.Text), passwordDefault, Vp);
 
             string versionSw = "-1";
-            if (!pd.getMeterSoftware(ref versionSw))
+            if (!Meter.getMeterSoftware(ref versionSw))
             {
                 sw = "Can't get meter model...";
             }
@@ -1381,7 +1382,7 @@ namespace elfextendedapp
                 sw = versionSw;
             }
 
-            if (!pd.ReadSerialNumber(ref serial))
+            if (!Meter.ReadSerialNumber(ref serial))
             {
                 serial = "No serial...";
             }
@@ -1574,11 +1575,10 @@ namespace elfextendedapp
         {
             string serial = "", sw = "", mt = "";
 
-            KaratDanfosDriver pd = new KaratDanfosDriver();
             // обязательно по широковещательному задаем адрес
-            pd.Init(248, passwordDefault, Vp);
+            Meter.Init(248, passwordDefault, Vp);
 
-            if (!pd.setMeterAddress(ushort.Parse(textBox1.Text)))
+            if (!Meter.setMeterAddress(ushort.Parse(textBox1.Text)))
             {
                 sw = "Не получилось обновить адрес прибора...";
             } else
@@ -1621,19 +1621,18 @@ namespace elfextendedapp
             toolStripStatusLabel1.Text = String.Format("({0}/{1})", toolStripProgressBar1.Value, toolStripProgressBar1.Maximum);
 
             InputDataReady = true;
-
-
         }
 
         private void btnAddrClear_Click(object sender, EventArgs e)
         {
             string serial = "", sw = "", mt = "";
 
-            KaratDanfosDriver pd = new KaratDanfosDriver();
-            // обязательно по широковещательному задаем адрес
-            pd.Init(248, passwordDefault, Vp);
 
-            if (!pd.setMeterAddress(0xFFFF))
+            // обязательно по широковещательному задаем адрес
+            // Meter.Init(248, passwordDefault, Vp);
+            Meter.Init(uint.Parse(textBox1.Text), passwordDefault, Vp);
+
+            if (!Meter.setMeterAddress(0xFFFF))
             {
                 sw = "Не получилось обновить адрес прибора...";
             }
@@ -1644,6 +1643,11 @@ namespace elfextendedapp
 
             btnAddressRead.Clear();
             btnAddressRead.Text += sw + "\n";
+        }
+
+        private void checkBoxTcp_CheckedChanged_1(object sender, EventArgs e)
+        {
+
         }
     }
 

@@ -61,6 +61,7 @@
             this.btnIndPollMonthly = new System.Windows.Forms.Button();
             this.btnGenerateTable = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnAddrClear = new System.Windows.Forms.Button();
             this.btnAddressSet = new System.Windows.Forms.Button();
             this.btnGetErrDescr = new System.Windows.Forms.Button();
             this.tbErrCode = new System.Windows.Forms.TextBox();
@@ -88,7 +89,6 @@
             this.label11 = new System.Windows.Forms.Label();
             this.numAddrTo = new System.Windows.Forms.NumericUpDown();
             this.numAddrFrom = new System.Windows.Forms.NumericUpDown();
-            this.btnAddrClear = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgv1)).BeginInit();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownComReadTimeout)).BeginInit();
@@ -354,6 +354,7 @@
             this.checkBoxTcp.Text = "TCP";
             this.toolTip1.SetToolTip(this.checkBoxTcp, "Активировать режим связи по TCP/IP");
             this.checkBoxTcp.UseVisualStyleBackColor = true;
+            this.checkBoxTcp.CheckedChanged += new System.EventHandler(this.checkBoxTcp_CheckedChanged_1);
             // 
             // btnIndPollDaily
             // 
@@ -512,6 +513,18 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Индивидуальный блок";
             this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
+            // 
+            // btnAddrClear
+            // 
+            this.btnAddrClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAddrClear.Location = new System.Drawing.Point(91, 37);
+            this.btnAddrClear.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnAddrClear.Name = "btnAddrClear";
+            this.btnAddrClear.Size = new System.Drawing.Size(65, 28);
+            this.btnAddrClear.TabIndex = 81;
+            this.btnAddrClear.Text = "Сброс";
+            this.btnAddrClear.UseVisualStyleBackColor = true;
+            this.btnAddrClear.Click += new System.EventHandler(this.btnAddrClear_Click);
             // 
             // btnAddressSet
             // 
@@ -824,18 +837,6 @@
             0,
             0,
             0});
-            // 
-            // btnAddrClear
-            // 
-            this.btnAddrClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAddrClear.Location = new System.Drawing.Point(91, 37);
-            this.btnAddrClear.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btnAddrClear.Name = "btnAddrClear";
-            this.btnAddrClear.Size = new System.Drawing.Size(65, 28);
-            this.btnAddrClear.TabIndex = 81;
-            this.btnAddrClear.Text = "Сброс";
-            this.btnAddrClear.UseVisualStyleBackColor = true;
-            this.btnAddrClear.Click += new System.EventHandler(this.btnAddrClear_Click);
             // 
             // Form1
             // 
