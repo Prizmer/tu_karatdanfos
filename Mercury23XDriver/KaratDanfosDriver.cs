@@ -259,7 +259,15 @@ namespace Drivers.KaratDanfosDriver
 
             // приходят младшим байтом вперед (little endian)
             byte[] serialBytes = new byte[32];
-            Array.Copy(incommingData, ANSW_DATA_OFFSET, serialBytes, 0, serialBytes.Length);
+            try
+            {
+                Array.Copy(incommingData, ANSW_DATA_OFFSET, serialBytes, 0, serialBytes.Length);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+           
 
             if (!BitConverter.IsLittleEndian)
                 Array.Reverse(serialBytes);

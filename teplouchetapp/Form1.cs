@@ -1575,11 +1575,15 @@ namespace elfextendedapp
             string serial = "", sw = "", mt = "";
 
             KaratDanfosDriver pd = new KaratDanfosDriver();
-            pd.Init(uint.Parse(textBox1.Text), passwordDefault, Vp);
+            // обязательно по широковещательному задаем адрес
+            pd.Init(248, passwordDefault, Vp);
 
             if (!pd.setMeterAddress(ushort.Parse(textBox1.Text)))
             {
                 sw = "Не получилось обновить адрес прибора...";
+            } else
+            {
+                sw = "Готово";
             }
 
             btnAddressRead.Clear();
@@ -1619,6 +1623,27 @@ namespace elfextendedapp
             InputDataReady = true;
 
 
+        }
+
+        private void btnAddrClear_Click(object sender, EventArgs e)
+        {
+            string serial = "", sw = "", mt = "";
+
+            KaratDanfosDriver pd = new KaratDanfosDriver();
+            // обязательно по широковещательному задаем адрес
+            pd.Init(248, passwordDefault, Vp);
+
+            if (!pd.setMeterAddress(0xFFFF))
+            {
+                sw = "Не получилось обновить адрес прибора...";
+            }
+            else
+            {
+                sw = "Готово";
+            }
+
+            btnAddressRead.Clear();
+            btnAddressRead.Text += sw + "\n";
         }
     }
 

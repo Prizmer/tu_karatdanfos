@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.buttonImport = new System.Windows.Forms.Button();
             this.dgv1 = new System.Windows.Forms.DataGridView();
@@ -88,6 +88,7 @@
             this.label11 = new System.Windows.Forms.Label();
             this.numAddrTo = new System.Windows.Forms.NumericUpDown();
             this.numAddrFrom = new System.Windows.Forms.NumericUpDown();
+            this.btnAddrClear = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgv1)).BeginInit();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownComReadTimeout)).BeginInit();
@@ -121,35 +122,35 @@
             this.dgv1.AllowUserToDeleteRows = false;
             this.dgv1.AllowUserToResizeRows = false;
             this.dgv1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgv1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgv1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgv1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv1.ColumnHeadersVisible = false;
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgv1.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgv1.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgv1.Location = new System.Drawing.Point(17, 100);
             this.dgv1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dgv1.Name = "dgv1";
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgv1.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgv1.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dgv1.RowTemplate.Height = 28;
             this.dgv1.Size = new System.Drawing.Size(792, 303);
             this.dgv1.TabIndex = 4;
@@ -345,7 +346,7 @@
             // checkBoxTcp
             // 
             this.checkBoxTcp.AutoSize = true;
-            this.checkBoxTcp.Location = new System.Drawing.Point(383, 40);
+            this.checkBoxTcp.Location = new System.Drawing.Point(488, 41);
             this.checkBoxTcp.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxTcp.Name = "checkBoxTcp";
             this.checkBoxTcp.Size = new System.Drawing.Size(57, 21);
@@ -474,6 +475,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnAddrClear);
             this.groupBox1.Controls.Add(this.btnAddressSet);
             this.groupBox1.Controls.Add(this.btnGetErrDescr);
             this.groupBox1.Controls.Add(this.tbErrCode);
@@ -514,7 +516,7 @@
             // btnAddressSet
             // 
             this.btnAddressSet.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAddressSet.Location = new System.Drawing.Point(82, 39);
+            this.btnAddressSet.Location = new System.Drawing.Point(162, 37);
             this.btnAddressSet.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnAddressSet.Name = "btnAddressSet";
             this.btnAddressSet.Size = new System.Drawing.Size(111, 28);
@@ -549,7 +551,7 @@
             // 
             this.btnIpPreset.Enabled = false;
             this.btnIpPreset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnIpPreset.Location = new System.Drawing.Point(446, 36);
+            this.btnIpPreset.Location = new System.Drawing.Point(551, 37);
             this.btnIpPreset.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnIpPreset.Name = "btnIpPreset";
             this.btnIpPreset.Size = new System.Drawing.Size(28, 28);
@@ -663,7 +665,7 @@
             // 
             // textBoxPort
             // 
-            this.textBoxPort.Location = new System.Drawing.Point(321, 42);
+            this.textBoxPort.Location = new System.Drawing.Point(426, 43);
             this.textBoxPort.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxPort.Name = "textBoxPort";
             this.textBoxPort.Size = new System.Drawing.Size(56, 22);
@@ -672,7 +674,7 @@
             // 
             // textBoxIp
             // 
-            this.textBoxIp.Location = new System.Drawing.Point(216, 42);
+            this.textBoxIp.Location = new System.Drawing.Point(321, 43);
             this.textBoxIp.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxIp.Name = "textBoxIp";
             this.textBoxIp.Size = new System.Drawing.Size(99, 22);
@@ -823,6 +825,18 @@
             0,
             0});
             // 
+            // btnAddrClear
+            // 
+            this.btnAddrClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAddrClear.Location = new System.Drawing.Point(91, 37);
+            this.btnAddrClear.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnAddrClear.Name = "btnAddrClear";
+            this.btnAddrClear.Size = new System.Drawing.Size(65, 28);
+            this.btnAddrClear.TabIndex = 81;
+            this.btnAddrClear.Text = "Сброс";
+            this.btnAddrClear.UseVisualStyleBackColor = true;
+            this.btnAddrClear.Click += new System.EventHandler(this.btnAddrClear_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -934,6 +948,7 @@
         private System.Windows.Forms.NumericUpDown numAddrTo;
         private System.Windows.Forms.NumericUpDown numAddrFrom;
         private System.Windows.Forms.Button btnGenerateTable;
+        private System.Windows.Forms.Button btnAddrClear;
     }
 }
 
