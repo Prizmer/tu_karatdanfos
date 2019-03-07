@@ -1629,16 +1629,10 @@ namespace elfextendedapp
 
 
             // обязательно по широковещательному задаем адрес
-            // Meter.Init(248, passwordDefault, Vp);
-            Meter.Init(uint.Parse(textBox1.Text), passwordDefault, Vp);
-
-            if (!Meter.setMeterAddress(0xFFFF))
+            Meter.Init(0, passwordDefault, Vp);
+            if (!Meter.setMeterAddress(0x00FF, true))
             {
-                sw = "Не получилось обновить адрес прибора...";
-            }
-            else
-            {
-                sw = "Готово";
+                sw = "Вроде готово...";
             }
 
             btnAddressRead.Clear();

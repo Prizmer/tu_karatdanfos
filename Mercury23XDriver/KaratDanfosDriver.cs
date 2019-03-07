@@ -6,6 +6,7 @@ using System.Linq;
 
 using Drivers.LibMeter;
 using PollingLibraries.LibPorts;
+using System.Threading;
 
 
 
@@ -283,18 +284,24 @@ namespace Drivers.KaratDanfosDriver
         }
 
 
-        public bool setMeterAddress(ushort decAddr)
+        public bool setMeterAddress(ushort decAddr, bool bClear = false)
         {
             byte[] addrArr = BitConverter.GetBytes(decAddr);
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(addrArr);
 
-            const ushort REG_READ_ADDR = 0xF001;
+           // byte[] addrArr = { 0x0, 0x02 };
+
+            ushort REG_READ_ADDR = 0xF001;
+            if (bClear)
+                REG_READ_ADDR = 0xF000;
+
             byte[] cmd = this.makeCmd(KaratFunctions.Write, REG_READ_ADDR, addrArr);
 
             byte[] incommingData = new byte[1];
             int resWriteRead = m_vport.WriteReadData(FindPacketSignature, cmd, ref incommingData, cmd.Length, -1);
 
+    
             string errDescription = "";
             if (!isAnswerDataOk(incommingData, ref errDescription))
             {
@@ -691,11 +698,11 @@ namespace Drivers.KaratDanfosDriver
             // всегда делай так, нужно для логгирования
             this.m_vport = data_vport;
 
-            if (address == 0)
-            {
-                WriteToLog("Init: Не возможно проинициализировать драйвер karat30X с адресом 0");
-                return;
-            }
+            //if (address == 0)
+            //{
+            //    WriteToLog("Init: Не возможно проинициализировать драйвер karat30X с адресом 0");
+            //    return;
+            //}
 
             this.WriteToLog("Драйвер карата проинициализирован");
 
