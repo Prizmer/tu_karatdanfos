@@ -294,10 +294,21 @@ namespace elfextendedapp
         private void WriteToStatus(string str)
         {
             MessageBox.Show(str, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
+        } 
 
         private void Form1_Load(object sender, EventArgs e)
         {
+
+            //byte[] arr = { 0x0, 0x00, 0x00, 0x01, 0x81, 0xAA, 0x3F, 0x50 };
+            //byte[] arr2 = { 0x0, 0x01, 0x21, 0x99, 0x68, 0xA4, 0x03, 0xBE };
+
+            //Array.Reverse(arr);
+            //Array.Reverse(arr2);
+
+            //double b = Math.Round(BitConverter.ToInt64(arr, 0) * Math.Pow(10, -9), 4, MidpointRounding.AwayFromZero);
+            //double d = Math.Round(BitConverter.ToInt64(arr2, 0) * Math.Pow(10, -12), 4, MidpointRounding.AwayFromZero); 
+
+
             //setting up dialogs
             ofd1.Filter = "Excel files (*.xls) | *.xls";
             sfd1.Filter = ofd1.Filter;

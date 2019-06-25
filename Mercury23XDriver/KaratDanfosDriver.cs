@@ -223,7 +223,16 @@ namespace Drivers.KaratDanfosDriver
 
             // приходят младшим байтом вперед (little endian)
             byte[] modelBytes = new byte[answerBytesCnt];
-            Array.Copy(incommingData, ANSW_DATA_OFFSET, modelBytes, 0, modelBytes.Length);
+            try
+            {
+                Array.Copy(incommingData, ANSW_DATA_OFFSET, modelBytes, 0, modelBytes.Length);
+            } catch (Exception ex)
+            {
+                WriteToLog("getMeterSoftware: переполнение массива: " + ex.Message);
+                WriteToLog($"getMeterSoftware: доп информация, answerBytesCnt={answerBytesCnt}, пришедшие байты: {BitConverter.ToString(incommingData)}");
+                return false;
+            }
+            
 
             // если в системе данные хранятся старшим байтом вперед , то сделаем реверс
             if (!BitConverter.IsLittleEndian)
@@ -443,7 +452,16 @@ namespace Drivers.KaratDanfosDriver
 
             // приходят младшим байтом вперед (little endian)
             byte[] dataBytes = new byte[byteCnt];
-            Array.Copy(incommingData, ANSW_DATA_OFFSET, dataBytes, 0, dataBytes.Length);
+            try
+            {
+                Array.Copy(incommingData, ANSW_DATA_OFFSET, dataBytes, 0, dataBytes.Length);
+            }
+            catch (Exception ex)
+            {
+                WriteToLog("getCurrentValue: переполнение массива: " + ex.Message);
+                WriteToLog($"getCurrentValue: доп информация, answerBytesCnt={byteCnt}, пришедшие байты: {BitConverter.ToString(incommingData)}");
+                return false;
+            }
 
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(dataBytes);
@@ -452,9 +470,39 @@ namespace Drivers.KaratDanfosDriver
             // в зависимости от номера регистра, выполним соответствующее преобразование
             if (regNumber < 17)
             {
+                double tmp = BitConverter.ToInt64(dataBytes, 0);
+ 
                 //sint64
-                value = BitConverter.ToInt64(dataBytes, 0);
+                if (regNumber == 1 || regNumber == 5)
+                {
+                    // объем, приходит в 10^-12 м3               
+                    double volInitial = BitConverter.ToInt64(dataBytes, 0);
+                    double volInM3 = volInitial * Math.Pow(10, -12);
 
+                    double result = Math.Round(volInM3, 4, MidpointRounding.AwayFromZero);
+                    value = (float)result;
+                }
+                else if (regNumber == 9 || regNumber == 13)
+                {
+                    // энергия в Дж
+                    double energyInJoules = BitConverter.ToInt64(dataBytes, 0);
+
+                    // Джоулей в 1 Ккал (кило, мего, гига)
+                    const double JOULE_IN_CCAL = 4184;
+                    double energyInGCal = energyInJoules  * Math.Pow(10, -6) / JOULE_IN_CCAL;
+ 
+                    // как лучше хранить в базе? Может лучше хранить ГДж (джоули в 10^-9)? Тогда показания со счетчика
+                    // и показания в базе будут сравнимы
+
+                    double result = Math.Round(energyInGCal, 4, MidpointRounding.AwayFromZero);
+                    value = (float)result;
+                }
+                else
+                {
+                    value = -1;//BitConverter.ToUInt64(dataBytes, 0);
+                    this.WriteToLog("getCurrentValue: запрошено значение 64 бит с адресом < 17. СО работает с 32 разрядами, поэтому конвертация может быть ошибочный. Значение не получено.");
+                    return false;
+                }
             }
             else if (regNumber >= 17 && regNumber < 31)
             {
@@ -479,7 +527,9 @@ namespace Drivers.KaratDanfosDriver
                         }
                     case 8:
                         {
-                            value = BitConverter.ToUInt64(dataBytes, 0);
+                            value = -1;//BitConverter.ToUInt64(dataBytes, 0);
+                            this.WriteToLog("getCurrentValue: запрошено значение 64 бит с адресом 31 - 47. СО работает с 32 разрядами, поэтому конвертация может быть ошибочный. Значение не получено.");
+                            return false;
                             break;
                         }
                 }
